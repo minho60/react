@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리액트 CDN</title>
+
+</head>
+
+<body>
+    <!-- 2. 최상위(루트) 태그 -->
+    <div id="root">여기에 내용이 출력된다</div>
+    <!-- 리액트 라이브러리 -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <!-- 리액트 DOM라이브러리 -->
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- 바벨 라이브러리 -->
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js"></script>
+
+
+
+    <!-- React 코드 작성 영역 -->
+    <script type="text/babel">
+
+        // 함수형 컴포넌트 정의
+        function App() {
+        //    JSX를  변환=> 화면에 렌더링 될 내용
+                return <h1>Hello, React CDN!</h1>;
+        }
+            
+
+        // App(); -> JS 함수 호출
+        // <App /> -> 리액트 컴포넌트 호출
+
+        // createRoot(루트객체)
+        // - createRoot() 이란? 리액트 18버전에서 새롭게 추가된 기능으로,
+        // - 리액트 애플리케이션의 루트 DOM 노드를 생성하는 역할
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+
+        // ReactDOM을 통해 App 컴포넌트를 root에 렌더링
+        // 객체.render();
+          root.render(<App />);
+
+        // ReactDOM 객체의 createRoot 메서드를 사용하여
+        // 'root'라는 id를 가진 DOM 요소에 
+        // 리액트 컴포넌트를 렌더링 -> render 메서드를 통해 인자를 루트에 전달한다.
+
+      
+    </script>
+
+</body>
+
+</html>
