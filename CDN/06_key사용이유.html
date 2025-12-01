@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Key 미사용 문제 예시</title>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+
+function App() {
+  const [items, setItems] = React.useState(["사과", "바나나", "포도"]);
+
+  const addItem = () => {
+    // 리스트 앞에 추가 → 문제를 명확하게 보여줌
+    // items = ["사과", "바나나", "포도"]
+    // items = ["🍓 딸기", "사과", "바나나", "포도"]
+    // items = ["🍓 딸기","🍓 딸기", "사과", "바나나", "포도"]
+    // ...items는 기존 배열을 의미
+    setItems(["🍓 딸기", ...items]);
+  };
+
+  return (
+    <div>
+      <h2>key를 사용하지 않았을 때 문제</h2>
+      <button onClick={addItem}>앞에 추가하기</button>
+
+      <ul>
+        {items.map((item, index) => (
+          // ❌ key가 없음 → React가 항목을 제대로 식별하지 못함
+          <li key={item} >
+            <input type="checkbox" /> {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+
+</body>
+</html>

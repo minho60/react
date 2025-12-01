@@ -14,10 +14,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // 1. JSX 기본 태그 구조
-        const element = <h1>Hello, world!</h1>;  // 올바름
-        const img = <img src="logo.png" />;      // 반드시 self-closing
-        const element2 = <br />;   // 오류! 닫는 태그 필요
+
 
         /* 
             컴포넌트
@@ -27,11 +24,23 @@
                         );    
                 }
         */
-        function App() {
+
+        // JSX 문법
+
+        // 1. 반드시 self-closing
+        const element = <h1>Hello, world!</h1>;  // 올바름
+        const img = <img src="logo.png" />;      // 반드시 self-closing
+        const element2 = <br />;   // 오류! 닫는 태그 필요
+        const input = <input type="text" />
+        const hr = <hr />
+
+
+
+        // 2. JSX는 반드시 하나의 부모 태그로 감싸야 한다.
+        // <></>: flagments 태그 (ver.16)
+        function App2() {
             return (
-                // 2. JSX는 반드시 하나의 부모 태그로 감싸야 한다.
-                // <></>: flagments 태그 (ver.16)
-                <>
+                <React.Fragment>
                     <div>
                         <h1>제목</h1>
                         <p>본문</p>
@@ -40,13 +49,32 @@
                         <h1>제목</h1>
                         <p>본문</p>
                     </div>
-                </>
+                </React.Fragment>
             );
         }
+        function App3() {
+            return (
+                <React.Fragment>
+                    <div>
+                        <h1>제목</h1>
+                        <p>본문</p>
+                    </div>
+                    <div>
+                        <h1>제목</h1>
+                        <p>본문</p>
+                    </div>
+                </React.Fragment>
+            );
+        }
+
         // 3. 속성 이름은 카멜 표기법으로
         // 예) className, htmlFor, tabIndex
+
         const div = <div className="box">내용</div>
         const label = <label htmlFor="inputId">이름</label>
+        const input3 = <input disabled />
+        const input4 = <input disabled={true} />
+
 
         // 4. JSX 안에서는 JavaScript 표현식을 `{}`로 감쌉니다.
         const name = "React";
@@ -59,18 +87,78 @@
         const isAdmin = true;
         const login = <div> {isLoggedIn ? <p>환영합니다</p> : <p>로그인하세요</p>}</div>
         const admin = <div>{isAdmin && <button>관리자 페이지</button>}</div>
-  
 
 
-        // 4-2. 인ㄹ인 style 속성은 객체형태로 작성한다.
+
+        // 4-2. 인라인 style 속성은 객체형태로 작성한다.
         const style = { color: 'red', fontSize: '20px' };
         const element4 = <h1 style={style}>스타일 적용</h1>;
 
+        // 4-3 이벤트 핸들링 - 속성명은 카멜 표기법
+        // App4 컴포넌트
+        function App4() {
+            // JS 영역
+            // doSomething함수
+            function doSomething() { alert('doSomething 함수') }
+            return (
+                <>
+                    {/* JSX 영역: shift+alt+a*/}
+                    <button onClick={doSomething}>Click Me</button>
+                </>
+            );
+        }
+        function App5() {
+            // const [변수, 함수] = React.useState(초기값);
+            const [text, setText] = React.useState('');
+            const handleChange = e => setText(e.target.value);
+            const handleClick = del => setText(del)
+            // function handleChange(event) {
+            //     setText(event.target.value);
+            // }
+            // console.log(event.target)
+
+            return (
+                // onChange: 입력 값의 변경이 있을 떄
+                <>
+                    <input type="text" value={text} onChange={handleChange} />
+                    <p>You typed: {text}</p>
+                    <button onClick={function () { handleClick('') }}>Delete</button>
+                    {/* <button onClick={()-=> handleClick(id)}>Delete</button>  */}
+                </>
+            );
+        }
+        // 5. 변수 출력
+        // JSX에서 변수를 출력(렌더링)하려면 중괄호 {}를 사용합니다.
+
+        function App6() {
+            const name = "Alice";
+            function getGreeting(name) {
+                //순수 js에서 템플릿 리터럴: ${표현식}
+                return `Hi, ${name}`;
+            }
+            return (
+                <>
+                    <h1>Hello, {name}!</h1>
+                    <h2>{getGreeting("Tom")}</h2>
+                </>
+            );
+        };
+
+        // 6. map()으로 출력
+        function App7() {
+            const fruits = ['🍎', '🍌', '🍇'];
+            // 배열.map((요소, 인덱스) => {});
+            return (
+                <ul>
+                    {fruits.map((fruit, index) => (<li key={index}>{fruit}</li>))}
+                </ul>
+            );
+        };
 
 
-
+        // 랜더링 -> 화면출력
         const root = ReactDOM.createRoot(document.querySelector('#root'));
-        root.render(element4); 
+        root.render(<App7 />); 
     </script>
 
 </body>

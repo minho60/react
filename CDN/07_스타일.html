@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSX 스타일</title>
+    <link rel="stylesheet" href="App.css">
+    <style>
+        #box {
+            background: lightcoral;
+        }
+
+        .box {
+            padding: 20px;
+            border: 1px solid red;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .alert {
+            background: yellow;
+        }
+    </style>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const styleObj = {
+            color: 'blue',
+            // 카멜케이스(낙타표기법)
+            backgroundColor: 'lightgray',
+            // 케밥케이스 -> 적용은 되나 좋은 방법은 아님! (Warning)
+            //"background-color": 'lightpink',
+            fontSize: '60px',
+            padding: '10px',
+        };
+
+        const isError = false;
+
+        /* 
+            1. 인라인 스타일(Inline Style)
+                형식:
+                    <태그 style={{속성: 값, 속성: 값, ...}}>
+                - 속성은 카멜 표기법으로,
+                - 값의 단위은 가능한 표기한다.
+        */
+        function InlineStyle() {
+            return (
+                <div>
+                    {/* JSX 내부에서는 JS 문(statement) 사용 불가 */}
+                    {/* const isError = false; */}
+                    {/* 조건부 스타일 */}
+                    <h1 style={{ color: isError ? 'red' : 'green' }}>
+                        {isError ? '오류 발생' : '정상'}
+                    </h1>
+                    <div style={styleObj}>인라인 스타일</div>
+                    {/* return <div style={{fontSize: "30px"}}>스타일이 적용된 박스</div>; */}
+                </div>
+            );
+        }
+
+        /* 
+            2. 외부 스타일(External Style)
+                - CDN: <link rel="stylesheet" href="App.css">
+                - CRA, Vite: import "./App.css"
+        */
+        // 컴포넌트 이름은 파스칼 표기법 -> 단어별로 첫 단어부터 첫 글자를 대문자
+        function ExternalStyle() {
+            return (
+                // class가 아닌 className으로 쓴다.
+                <div>
+                    <h1 className="title">외부 스타일</h1>
+                </div>
+            );
+        }
+
+        /* 
+            3. 내부 스타일(Internal Style)
+                - CDN: <style>CSS정의</style>
+                - CDN, CRA, Vite: JSX 영역내에서 <style>{`CSS정의`}</style>
+        */
+        function InternalStyle() {
+            return (
+                <div>
+                    <style>
+                        {`
+                            .internal {
+                                font-style: italic;
+                                text-shadow: 0 0 5px #fff;
+                                border-radius: 50px;
+                            }
+                        `}
+                    </style>
+                    <h1 className="box internal" id="box">내부 스타일</h1>
+                    <Alert type="error" />
+                </div>
+            );
+        }
+
+
+        // 3-1. 조건부(삼항 연산자) 내부 스타일 적용!
+        function Alert({ type }) {
+            const className = type === 'error' ? 'alert error' : 'alert success';
+            return <div className={className}>알림 메시지 - 내부 스타일</div>;
+        }
+
+
+        // 루트 컴포넌트
+        function App() {
+            return (
+                <>
+                    <h1>JSX에서 스타일 적용하기!</h1>
+                    <InlineStyle />
+                    <InternalStyle />
+                    <ExternalStyle />
+                </>
+            );
+        }
+
+        // 출력
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

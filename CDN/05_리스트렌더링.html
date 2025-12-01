@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리스트렌더링</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        function App() {
+            return (
+                <div>
+                    <FruitList />
+                    <FruitList2 />
+                    <User />
+                    <User2 />
+                </div>
+            )
+        };
+
+
+        // 배열을 JSX로 렌더링
+        const fruits = ['🍎 Apple', '🍌 Banana', '🍇 Grape'];
+
+        function FruitList() {
+            return (
+                <ul>
+                    {/* 배열.map()함수 */}
+                    {/* 배열.map(([요소],[인덱스],[배열])=>{}) */}
+                    {fruits.map((fruit, index) => (
+                        //키는 유일한 값으로 지정한다.
+                        <li key={fruit}> {fruit}</li>
+                    ))}
+                </ul >
+            );
+        }
+
+        // name이라는 prop을 구조 분해 할당으로 받아 출력합니다.
+        // 자식 컴포넌트
+        // Fruit 컴포넌트는 하나의 과일 이름을 <li> 태그로 렌더링합니다.
+        function Fruit({ name }) {
+            return <li>{name}</li>; // JSX 안에서는 변수 출력 시 중괄호 {} 사용
+        }
+
+        // 부모컴포넌트
+        // FruitList 컴포넌트는 과일 리스트 전체를 렌더링합니다.
+        function FruitList2() {
+            // 과일 이름이 들어 있는 배열
+            const fruits = ['🍓 Strawberry', '🥝 Kiwi', '🍍 Pineapple'];
+
+            return (
+                <ul>
+                    {/* 배열의 각 과일을 map() 함수로 반복 렌더링합니다.
+          각 항목마다 Fruit 컴포넌트를 반환합니다. */}
+                    {fruits.map((fruit, i) => (
+                        // key는 React가 각 항목을 고유하게 식별하기 위해 필요합니다.
+                        // 여기선 배열 index를 사용했지만, 실제 앱에서는 고유 ID가 더 바람직합니다.
+                        <Fruit key={i} name={fruit} />
+                    ))}
+                </ul>
+            );
+        }
+
+
+
+        function User() {
+            const users = [
+                { id: 'u1', name: 'Alice' },
+                { id: 'u2', name: 'Bob' },
+            ];
+            return (
+                <ul>
+                    {users.map(user => (
+                        <li key={user.id}>{user.name}</li>
+                    ))}
+                </ul>
+            )
+        }
+
+
+        // map() + 삼항연산자 
+        function User2() {
+            const items = [
+                { id: 'u1', name: 'Alice' },
+                { id: 'u2', name: 'Bob' },
+            ];
+            return (
+                <ul>
+                    {items.length > 0 ? (
+                        items.map(item => <li key={item.id}>{item.name}</li>)
+                    ) : (
+                        <p>No items found.</p>
+                    )}
+                </ul>
+            )
+        }
+
+
+
+        // 랜더링 -> 화면출력
+        const root = ReactDOM.createRoot(document.querySelector('#root'));
+        root.render(< App />); 
+    </script>
+</body>
+
+</html>

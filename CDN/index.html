@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My To Do List</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Google Fonts: Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .todo-container {
+            max-width: 940px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 992px) {
+            .todo-container {
+                max-width: 700px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .todo-container {
+                max-width: 100%;
+                margin: 20px 30px;
+            }
+        }
+
+        /* 높이, 너비 통일용 클래스 */
+        .equal-height {
+            height: 40px;
+        }
+
+        .equal-width {
+            min-width: 100px;
+            width: 100%;
+            max-width: 120px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <!-- React CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- React Code -->
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+            return (
+                <div>
+                    <ToDoApp />
+                </div>
+            );
+        }
+
+        function ToDoApp() {
+            const [tasks, setTasks] = React.useState([]);
+            const [input, setInput] = React.useState("");
+
+            const addTask = () => {
+                if (input.trim() === "") return;
+                setTasks([...tasks, input.trim()]);
+                setInput("");
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === "Enter") {
+                    addTask();
+                }
+            };
+
+            // 삭제 함수는 부모에서 정의
+            // array.filter((element, [index], [array])=>{return 값;}); 
+            // 배열에서 조건에 맞는 요소들만 걸러내어 새로운 배열을 만든다.
+            // _는 요소 값(task)를 사용하지 않을 때 흔히 쓰는 변수명
+            const deleteTask = (index) => {
+                setTasks(tasks.filter((_, i) => i !== index));
+            };
+            return (
+                <div className="todo-container">
+                    <h2 className="text-center mb-4">
+                        <i className="fa-solid fa-list-ul text-primary me-3"></i>
+                        <strong>Todo List</strong>
+                    </h2>
+
+                    <div className="row g-2 align-items-stretch mb-4">
+                        <div className="col-sm-9 col-12">
+                            <input
+                                type="text"
+                                className="form-control equal-height"
+                                placeholder="할 일을 입력하세요"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                            />
+                        </div>
+                        <div className="col-sm-3 col-12 d-grid">
+                            <button
+                                className="btn btn-primary equal-height equal-width"
+                                onClick={addTask}
+                            >
+                                추가
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 삭제 함수도 같이 전달 */}
+                    <ListGroup tasks={tasks} onDelete={deleteTask} />
+                </div>
+            );
+        }
+
+
+        function ListGroup({ tasks, onDelete }) {
+            return (
+                <ul className="list-group">
+                    {tasks.map((task, index) => (
+                        <li
+                            key={index}
+                            className="list-group-item d-flex justify-content-between align-items-center"
+                        >
+                            <span className="me-3">{task}</span>
+                            <button
+                                className="btn btn-danger btn-sm equal-height equal-width"
+                                onClick={() => onDelete(index)}
+                            >
+                                삭제
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            );
+        }
+
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+/* @charset "utf-8"; 
+    -> 리액트에서 cra, vite 방식으로 프로젝트 제작시 생략 가능 
+*/
+
+.title {
+  color: blue;
+  font-size: 24px;
+}

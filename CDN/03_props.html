@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>props</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.28.4/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        // props(프롭스):
+        // - 부모에서 자식으로 데이터를 전달 할 때 값을 받는 매개변수 
+        // 부모 컴포넌트
+        // <자식 컴포넌트명 속성="값" 속성="값" />
+        function App() {
+            const handleClick = () => { alert('버튼을 클릭했습니다.') }
+            return (
+                <>
+                    <Welcome name="고라니" age="25" />
+                    <Profile name="홍길동" age={25} job="개발자" />
+                    <Counter onClick={handleClick} />
+                    <Wrapper>
+                        <h1>children</h1>
+                        <p>이 내용은 children입니다.</p>
+                    </Wrapper>
+                </>
+            );
+        }
+        // 자식 컴포넌트
+        //{props.속성명}
+        // 1. {props.속성명}
+        function Welcome(props) {
+
+            return <h1>안녕하세요{props.age}살, {props.name}님!</h1>;
+        }
+
+        // 2. props 구조분해할당
+
+        function Profile({ name, age, job }) {
+            return (
+                <div>
+                    <p>이름: {name}</p>
+                    <p>나이: {age}</p>
+                    <p>직업: {job}</p>
+                </div>
+            );
+        }
+        // props의 함수 전달
+        function Counter({ onClick }) {
+            return <button onClick={onClick}>+1</button>;
+        }
+
+        function Wrapper({ children }) {
+            return <div className="box">{children}</div>;
+        }
+
+
+        // 랜더링 -> 화면출력
+        const root = ReactDOM.createRoot(document.querySelector('#root'));
+        root.render(<App />); 
+    </script>
+</body>
+
+</html>
