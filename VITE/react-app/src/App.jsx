@@ -105,12 +105,12 @@ function App() {
   // const [변수,set변수] = useState(변수의 초기값);
   const [mode, setMode] = useState('WELCOME');
   const [id, setId] = useState(null);
-  const [nextId, setNextId] = useState(4);
+  const [nextId, setNextId] = useState(null);
   const[topics, setTopics] = useState( [
     {id:1, title:'html', body:'html is ...'},
     {id:2, title:'css', body:'css is ...'},
     {id:3, title:'js', body:'js is ...'},
-    {id:4, title:'jQuery', body:'jQuery is ...'}
+    // {id:4, title:'jQuery', body:'jQuery is ...'}
   ])
   let content = null;
   let contentControl =  null;
@@ -127,11 +127,28 @@ function App() {
       }
     } 
     content =  <Article title={title} body={body}></Article>
-    contentControl =  <li><a href={"/update/"+id} onClick={e=>{
+    contentControl = (
+      <>
+     <li><a href={"/update/"+id} onClick={e=>{
       e.preventDefault();
       setMode('UPDATE');
-
     }}>Update</a></li>
+    <li>
+      <input type="button" value= "Delete" onClick={()=>{
+        const newTopics = [];
+        for (let i = 0; i < topics.length; i++) {
+          if(topics[i].id !==id){
+            // 선택한 id와 같지 ㅇ낳은 항목만 배열에 추가
+            newTopics.push(topics[i]);
+          }
+        }
+        setTopics(newTopics);
+        setMode('WELCOME')
+      }} />
+    </li>
+    </>
+  )
+
   } else if(mode ==='CREATE'){
     content = <Create onCreate={(title, body)=>{
       const newTopic = {id:nextId, title:title, body:body};
@@ -149,6 +166,7 @@ function App() {
       setId(nextId);
       setNextId(nextId+1);
     }}></Create>
+
   } else if (mode === 'UPDATE'){
       let title, body =null;
     for (let i = 0; i < topics.length; i++) {
